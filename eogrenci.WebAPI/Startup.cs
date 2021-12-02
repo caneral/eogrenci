@@ -23,6 +23,14 @@ namespace eogrenci.WebAPI
             //BL de yazdığımız methodu burada çağırıyoruz. 
             services.AddDependencies();
 
+            services.AddCors(cors =>
+            {
+                cors.AddPolicy("CorsPolicy", opt =>
+                {
+                    opt.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
+            });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -52,6 +60,8 @@ namespace eogrenci.WebAPI
             });
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
