@@ -6,9 +6,11 @@
 
   <ItemGroup>
     <None Remove="QuestionDtos\" />
+    <None Remove="LessonDtos\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="QuestionDtos\" />
+    <Folder Include="LessonDtos\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />

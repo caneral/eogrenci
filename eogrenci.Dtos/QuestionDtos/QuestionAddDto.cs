@@ -1,7 +1,9 @@
 ﻿using System;
+using Core.Entities;
+
 namespace eogrenci.Dtos.QuestionDtos
 {
-    public class QuestionAddDto
+    public class QuestionAddDto : IDTO
     {
         public int CategoryId { get; set; }
         public int ParentId { get; set; }
