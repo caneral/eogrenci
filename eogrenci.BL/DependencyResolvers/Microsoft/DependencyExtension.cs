@@ -3,9 +3,11 @@ using AutoMapper;
 using eogrenci.BL.Abstract;
 using eogrenci.BL.Concrete;
 using eogrenci.BL.Mappings.AutoMapper;
+using eogrenci.BL.ValidationRules.Lesson;
 using eogrenci.BL.ValidationRules.Question;
 using eogrenci.Dal.Concrete.Context;
 using eogrenci.Dal.UnitOfWork;
+using eogrenci.Dtos.LessonDtos;
 using eogrenci.Dtos.QuestionDtos;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +41,9 @@ namespace eogrenci.BL.DependencyResolvers.Microsoft
             services.AddScoped<IQuestionService, QuestionManager>();
             services.AddTransient<IValidator<QuestionAddDto>, QuestionAddDtoValidator>();
             services.AddTransient<IValidator<QuestionUpdateDto>, QuestionUpdateDtoValidator>();
+
+            services.AddTransient<IValidator<LessonAddDto>,LessonAddDtoValidator>();
+            services.AddTransient<IValidator<LessonUpdateDto>,LessonUpdateDtoValidator>();
 
         }
     }

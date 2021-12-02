@@ -117,5 +117,6 @@ namespace eogrenci.BL.Concrete
 
 
         }
+
     }
 }

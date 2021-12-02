@@ -17,6 +17,7 @@
     <None Remove="ValidationRules\Question\" />
     <None Remove="FluentValidation.DependencyInjectionExtensions" />
     <None Remove="Extensions\" />
+    <None Remove="ValidationRules\Lesson\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Abstract\" />
@@ -28,6 +29,7 @@
     <Folder Include="ValidationRules\" />
     <Folder Include="ValidationRules\Question\" />
     <Folder Include="Extensions\" />
+    <Folder Include="ValidationRules\Lesson\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
