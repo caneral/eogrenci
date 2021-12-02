@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using eogrenci.BL.DependencyResolvers.Microsoft;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,8 @@ namespace eogrenci.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //BL de yazdığımız methodu burada çağırıyoruz. 
+            services.AddDependencies();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -34,13 +37,18 @@ namespace eogrenci.WebAPI
             if (env.IsDevelopment())
             {
                 app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                    //c.RoutePrefix = string.Empty; Eğer ki sunucuda reverse proxy yapacaksan kullan.
+                });
                 app.UseDeveloperExceptionPage();
             }
 
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                c.RoutePrefix = string.Empty;
+                //c.RoutePrefix = string.Empty; Eğer ki sunucuda reverse proxy yapacaksan kullan.
             });
 
             app.UseRouting();

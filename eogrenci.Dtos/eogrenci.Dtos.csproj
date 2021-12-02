@@ -5,10 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Concrete\" />
+    <None Remove="QuestionDtos\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Concrete\" />
+    <Folder Include="QuestionDtos\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />

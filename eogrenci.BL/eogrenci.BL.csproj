@@ -4,4 +4,40 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Abstract\" />
+    <None Remove="Concrete\" />
+    <None Remove="DependencyResolvers\" />
+    <None Remove="DependencyResolvers\Microsoft\" />
+    <None Remove="Mappings\" />
+    <None Remove="Mappings\AutoMapper\" />
+    <None Remove="AutoMapper" />
+    <None Remove="FluentValidation.AspNetCore" />
+    <None Remove="ValidationRules\" />
+    <None Remove="ValidationRules\Question\" />
+    <None Remove="FluentValidation.DependencyInjectionExtensions" />
+    <None Remove="Extensions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Abstract\" />
+    <Folder Include="Concrete\" />
+    <Folder Include="DependencyResolvers\" />
+    <Folder Include="DependencyResolvers\Microsoft\" />
+    <Folder Include="Mappings\" />
+    <Folder Include="Mappings\AutoMapper\" />
+    <Folder Include="ValidationRules\" />
+    <Folder Include="ValidationRules\Question\" />
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.4" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\eogrenci.Entities\eogrenci.Entities.csproj" />
+    <ProjectReference Include="..\eogrenci.Dtos\eogrenci.Dtos.csproj" />
+    <ProjectReference Include="..\eogrenci.Dal\eogrenci.Dal.csproj" />
+    <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
 </Project>
