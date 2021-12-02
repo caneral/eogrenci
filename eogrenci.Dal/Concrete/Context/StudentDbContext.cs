@@ -7,11 +7,16 @@ namespace eogrenci.Dal.Concrete.Context
 {
     public class StudentDbContext : DbContext
     {
-        
+
         public StudentDbContext(DbContextOptions<StudentDbContext> context) : base(context)
         {
 
         }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseMySQL("Server=localhost; Port=3306; Database=EStudent;User=root;Password=123456789; ConvertZeroDateTime=True;");
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,6 +30,7 @@ namespace eogrenci.Dal.Concrete.Context
 
         public DbSet<Student> Students { get; set; }
         public DbSet<Question> Questions { get; set; }
+        public DbSet<Lesson> Lessons { get; set; }
 
     }
 }

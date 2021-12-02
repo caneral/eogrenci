@@ -9,23 +9,56 @@ using eogrenci.Dal.Concrete.Context;
 namespace eogrenci.Dal.Migrations
 {
     [DbContext(typeof(StudentDbContext))]
-    [Migration("20211126194813_firstMig")]
-    partial class firstMig
+    [Migration("20211202134908_firstmig")]
+    partial class firstmig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.12");
+                .HasAnnotation("ProductVersion", "5.0.8");
 
-            modelBuilder.Entity("eogrenci.Entities.Concrete.Question", b =>
+            modelBuilder.Entity("eogrenci.Entities.Concrete.Lesson", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Lessons");
+                });
+
+            modelBuilder.Entity("eogrenci.Entities.Concrete.Question", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedDate")
@@ -36,6 +69,9 @@ namespace eogrenci.Dal.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("LessonId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ParentId")
                         .HasColumnType("int");

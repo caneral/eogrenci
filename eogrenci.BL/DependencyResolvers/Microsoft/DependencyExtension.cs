@@ -23,7 +23,7 @@ namespace eogrenci.BL.DependencyResolvers.Microsoft
             services.AddDbContext<StudentDbContext>(optionsBuilder =>
             {
                 optionsBuilder.UseMySQL("Server=localhost; Port=3306; Database=EStudent;User=root;Password=123456789; ConvertZeroDateTime=True;");
-                optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
+                //optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
             });
 
             var configuration = new MapperConfiguration(opt =>

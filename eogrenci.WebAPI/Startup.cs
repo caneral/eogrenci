@@ -22,6 +22,7 @@ namespace eogrenci.WebAPI
         {
             //BL de yazdığımız methodu burada çağırıyoruz. 
             services.AddDependencies();
+            
 
             services.AddCors(cors =>
             {

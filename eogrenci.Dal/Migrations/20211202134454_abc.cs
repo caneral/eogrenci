@@ -4,17 +4,36 @@ using MySql.EntityFrameworkCore.Metadata;
 
 namespace eogrenci.Dal.Migrations
 {
-    public partial class firstMig : Migration
+    public partial class abc : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Lessons",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    DepartmentId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false),
+                    Description = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lessons", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Questions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    LessonId = table.Column<int>(type: "int", nullable: false),
                     ParentId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: true),
                     QuestionText = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
@@ -49,6 +68,9 @@ namespace eogrenci.Dal.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Lessons");
+
             migrationBuilder.DropTable(
                 name: "Questions");
 
