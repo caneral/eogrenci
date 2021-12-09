@@ -4,19 +4,17 @@ using MySql.EntityFrameworkCore.Metadata;
 
 namespace eogrenci.Dal.Migrations
 {
-    public partial class abc : Migration
+    public partial class firstmig : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Lessons",
+                name: "Departments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    DepartmentId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     UpdateDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     DeleteDate = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -24,7 +22,7 @@ namespace eogrenci.Dal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Lessons", x => x.Id);
+                    table.PrimaryKey("PK_Departments", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -64,6 +62,36 @@ namespace eogrenci.Dal.Migrations
                 {
                     table.PrimaryKey("PK_Students", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Lessons",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false),
+                    Description = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false),
+                    DepartmentId = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lessons", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Lessons_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Lessons_DepartmentId",
+                table: "Lessons",
+                column: "DepartmentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -76,6 +104,9 @@ namespace eogrenci.Dal.Migrations
 
             migrationBuilder.DropTable(
                 name: "Students");
+
+            migrationBuilder.DropTable(
+                name: "Departments");
         }
     }
 }

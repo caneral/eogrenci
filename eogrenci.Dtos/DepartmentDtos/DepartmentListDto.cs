@@ -1,12 +1,12 @@
 ﻿using System;
 using Core.Entities;
 
-namespace eogrenci.Dtos.LessonDtos
+namespace eogrenci.Dtos.DepartmentDtos
 {
-    public class LessonListDto : IDTO
+    public class DepartmentListDto : IDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.ResponseObjects;
 using eogrenci.BL.Abstract;
-using eogrenci.Dtos.QuestionDtos;
+using eogrenci.Dtos.LessonDtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,13 +12,13 @@ namespace eogrenci.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class QuestionsController : ControllerBase
+    public class LessonsController : ControllerBase
     {
-        private readonly IQuestionService _questionService;
+        private readonly ILessonService _lessonService;
 
-        public QuestionsController(IQuestionService questionService)
+        public LessonsController(ILessonService lessonService)
         {
-            _questionService = questionService;
+            _lessonService = lessonService;
         }
 
         /// <summary>
@@ -26,11 +26,11 @@ namespace eogrenci.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<List<QuestionListDto>>> GetQuestionList()
+        public async Task<ActionResult<List<LessonListDto>>> GetLessonList()
         {
             try
             {
-                var response = await _questionService.GetAll();
+                var response = await _lessonService.GetAll();
                 return response.Data;
             }
             catch (Exception ex)
@@ -40,11 +40,11 @@ namespace eogrenci.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<QuestionListDto>> GetQuestionWithId(int id)
+        public async Task<ActionResult<LessonListDto>> GetLessonWithId(int id)
         {
             try
             {
-                var response = await _questionService.GetById(id);
+                var response = await _lessonService.GetById(id);
                 return response.Data;
             }
             catch (Exception ex)
@@ -53,16 +53,18 @@ namespace eogrenci.WebAPI.Controllers
             }
         }
 
+        
+
         /// <summary>
         /// Soru ekleme.
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<string>> AddQuestion(QuestionAddDto questionAddDto)
+        public async Task<ActionResult<string>> AddLesson(LessonAddDto lessonAddDto)
         {
             var list = new List<string>();
 
-            if (questionAddDto == null)
+            if (lessonAddDto == null)
             {
                 list.Add("Eklenecek soru bilgisi bulunamadı.");
                 return Ok(new { code = StatusCode(1001), message = list, type = "error" });
@@ -71,7 +73,7 @@ namespace eogrenci.WebAPI.Controllers
 
             try
             {
-                var response = await _questionService.Add(questionAddDto);
+                var response = await _lessonService.Add(lessonAddDto);
                 if (response.ResponseType == ResponseType.ValidationError)
                 {
                     foreach (var error in response.ValidationErrors)
@@ -98,12 +100,12 @@ namespace eogrenci.WebAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<string>> DeleteQuestion(int id)
+        public async Task<ActionResult<string>> DeleteLesson(int id)
         {
 
             try
             {
-                var response = await _questionService.Remove(id);
+                var response = await _lessonService.Remove(id);
                 if (response.ResponseType == ResponseType.NotFound)
                 {
                     return NotFound(response.Message);
@@ -117,10 +119,10 @@ namespace eogrenci.WebAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<string>> UpdateQuestion(QuestionUpdateDto questionUpdateDto)
+        public async Task<ActionResult<string>> UpdateLesson(LessonUpdateDto lessonUpdateDto)
         {
             var list = new List<string>();
-            var response = await _questionService.Update(questionUpdateDto);
+            var response = await _lessonService.Update(lessonUpdateDto);
             if (response.ResponseType == ResponseType.NotFound)
             {
                 foreach (var error in response.ValidationErrors)

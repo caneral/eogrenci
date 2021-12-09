@@ -36,10 +36,28 @@ namespace Core.DataAccess
         /// Tracking olmadan listeleme işlemi yapılır.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<TEntity>> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAll(Expression<Func<TEntity, bool>> filter = null, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] includeProperties)
         {
-           return await _dbSet.AsNoTracking().ToListAsync();
+            IQueryable<TEntity> query = _context.Set<TEntity>();
+            if (filter != null)
+            {
+                if (asNoTracking)
+                {
+                    query = query.Where(filter);
+                }
+                query = query.AsNoTracking().Where(filter);
+            }
+            if (includeProperties.Any())
+            {
+                foreach (var includeProperty in includeProperties)
+                {
+                    query.Include(includeProperty);
+                }
+            }
+
+            return  await query.ToListAsync();
         }
+
 
 
         /// <summary>
@@ -52,7 +70,7 @@ namespace Core.DataAccess
         {
             return asNoTracking ?
                 await _dbSet.SingleOrDefaultAsync(filter) :
-                await _dbSet.AsNoTracking().SingleOrDefaultAsync(filter); 
+                await _dbSet.AsNoTracking().SingleOrDefaultAsync(filter);
         }
 
 
@@ -66,15 +84,15 @@ namespace Core.DataAccess
             return await _dbSet.FindAsync(id);
         }
 
-        
+
 
         /// <summary>
         /// Query olarak getirmek için.
         /// </summary>
         /// <returns></returns>
-        public  IQueryable<TEntity> GetQuery()
+        public IQueryable<TEntity> GetQuery()
         {
-           return  _dbSet.AsQueryable();
+            return _dbSet.AsQueryable();
         }
 
 
@@ -96,5 +114,32 @@ namespace Core.DataAccess
         {
             _context.Entry(unchanged).CurrentValues.SetValues(entity);
         }
+
+
+
+        public IQueryable<TEntity> GetListQueryable(Expression<Func<TEntity, bool>> filter = null,
+                params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            return GetQueryable(filter, includeProperties);
+        }
+
+        public IQueryable<TEntity> GetQueryable(Expression<Func<TEntity, bool>> filter = null,
+            params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            IQueryable<TEntity> query = _context.Set<TEntity>();
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            if (includeProperties.Any())
+            {
+                foreach (var includeProperty in includeProperties)
+                {
+                    query.Include(includeProperty);
+                }
+            }
+            return query;
+        }
+
     }
 }

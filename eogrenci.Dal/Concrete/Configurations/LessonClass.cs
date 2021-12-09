@@ -18,6 +18,7 @@ namespace eogrenci.Dal.Concrete.Configurations
             builder.Property(x => x.Description).HasMaxLength(250);
 
             builder.Property(x => x.DepartmentId).IsRequired();
+            builder.HasOne<Department>(x => x.Department).WithMany(x => x.Lessons).HasForeignKey(x => x.DepartmentId);
 
         }
     }

@@ -3,10 +3,12 @@ using AutoMapper;
 using eogrenci.BL.Abstract;
 using eogrenci.BL.Concrete;
 using eogrenci.BL.Mappings.AutoMapper;
+using eogrenci.BL.ValidationRules.Department;
 using eogrenci.BL.ValidationRules.Lesson;
 using eogrenci.BL.ValidationRules.Question;
 using eogrenci.Dal.Concrete.Context;
 using eogrenci.Dal.UnitOfWork;
+using eogrenci.Dtos.DepartmentDtos;
 using eogrenci.Dtos.LessonDtos;
 using eogrenci.Dtos.QuestionDtos;
 using FluentValidation;
@@ -31,7 +33,9 @@ namespace eogrenci.BL.DependencyResolvers.Microsoft
             var configuration = new MapperConfiguration(opt =>
             {
                 opt.AddProfile(new QuesitonProfile());
-                
+                opt.AddProfile(new LessonProfile());
+                opt.AddProfile(new DepartmentProfile());
+
             });
             var mapper = configuration.CreateMapper();
 
@@ -39,11 +43,18 @@ namespace eogrenci.BL.DependencyResolvers.Microsoft
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IQuestionService, QuestionManager>();
+            services.AddScoped<ILessonService, LessonManager>();
+            services.AddScoped<IDepartmentService, DepartmentManager>();
+            
+
             services.AddTransient<IValidator<QuestionAddDto>, QuestionAddDtoValidator>();
             services.AddTransient<IValidator<QuestionUpdateDto>, QuestionUpdateDtoValidator>();
 
             services.AddTransient<IValidator<LessonAddDto>,LessonAddDtoValidator>();
             services.AddTransient<IValidator<LessonUpdateDto>,LessonUpdateDtoValidator>();
+
+            services.AddTransient<IValidator<DepartmentAddDto>, DepartmentAddDtoValidator>();
+            services.AddTransient<IValidator<DepartmentUpdateDto>, DepartmentUpdateDtoValidator>();
 
         }
     }

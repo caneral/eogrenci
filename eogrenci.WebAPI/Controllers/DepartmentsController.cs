@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.ResponseObjects;
 using eogrenci.BL.Abstract;
-using eogrenci.Dtos.QuestionDtos;
+using eogrenci.Dtos.DepartmentDtos;
+using eogrenci.Dtos.LessonDtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,13 +13,13 @@ namespace eogrenci.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class QuestionsController : ControllerBase
+    public class DepartmentsController : ControllerBase
     {
-        private readonly IQuestionService _questionService;
+        private readonly IDepartmentService _departmentService;
 
-        public QuestionsController(IQuestionService questionService)
+        public DepartmentsController(IDepartmentService departmentService)
         {
-            _questionService = questionService;
+            _departmentService = departmentService;
         }
 
         /// <summary>
@@ -26,11 +27,25 @@ namespace eogrenci.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<List<QuestionListDto>>> GetQuestionList()
+        public async Task<ActionResult<List<DepartmentListDto>>> GetDepartmentList()
         {
             try
             {
-                var response = await _questionService.GetAll();
+                var response = await _departmentService.GetAll();
+                return response.Data;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{id}/lessons")]
+        public async Task<ActionResult<List<LessonListDto>>> GetWithLessons(int id)
+        {
+            try
+            {
+                var response = await _departmentService.GetWithLessons(id);
                 return response.Data;
             }
             catch (Exception ex)
@@ -40,11 +55,11 @@ namespace eogrenci.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<QuestionListDto>> GetQuestionWithId(int id)
+        public async Task<ActionResult<DepartmentListDto>> GetDepartmentWithId(int id)
         {
             try
             {
-                var response = await _questionService.GetById(id);
+                var response = await _departmentService.GetById(id);
                 return response.Data;
             }
             catch (Exception ex)
@@ -53,16 +68,14 @@ namespace eogrenci.WebAPI.Controllers
             }
         }
 
-        /// <summary>
-        /// Soru ekleme.
-        /// </summary>
-        /// <returns></returns>
+
+
         [HttpPost]
-        public async Task<ActionResult<string>> AddQuestion(QuestionAddDto questionAddDto)
+        public async Task<ActionResult<string>> AddDepartment(DepartmentAddDto departmentAddDto)
         {
             var list = new List<string>();
 
-            if (questionAddDto == null)
+            if (departmentAddDto == null)
             {
                 list.Add("Eklenecek soru bilgisi bulunamadı.");
                 return Ok(new { code = StatusCode(1001), message = list, type = "error" });
@@ -71,7 +84,7 @@ namespace eogrenci.WebAPI.Controllers
 
             try
             {
-                var response = await _questionService.Add(questionAddDto);
+                var response = await _departmentService.Add(departmentAddDto);
                 if (response.ResponseType == ResponseType.ValidationError)
                 {
                     foreach (var error in response.ValidationErrors)
@@ -98,12 +111,12 @@ namespace eogrenci.WebAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<string>> DeleteQuestion(int id)
+        public async Task<ActionResult<string>> DeleteDepartment(int id)
         {
 
             try
             {
-                var response = await _questionService.Remove(id);
+                var response = await _departmentService.Remove(id);
                 if (response.ResponseType == ResponseType.NotFound)
                 {
                     return NotFound(response.Message);
@@ -117,10 +130,10 @@ namespace eogrenci.WebAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<string>> UpdateQuestion(QuestionUpdateDto questionUpdateDto)
+        public async Task<ActionResult<string>> UpdateDepartment(DepartmentUpdateDto departmentUpdateDto)
         {
             var list = new List<string>();
-            var response = await _questionService.Update(questionUpdateDto);
+            var response = await _departmentService.Update(departmentUpdateDto);
             if (response.ResponseType == ResponseType.NotFound)
             {
                 foreach (var error in response.ValidationErrors)

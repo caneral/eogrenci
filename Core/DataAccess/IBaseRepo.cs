@@ -13,9 +13,11 @@ namespace Core.DataAccess
         /// Tüm verileri asenkron olarak listeler.
         /// </summary>
         /// <returns></returns>
-        Task<List<TEntity>> GetAll();
+        Task<IEnumerable<TEntity>> GetAll(Expression<Func<TEntity, bool>> filter = null, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] includeProperties);
 
-       
+        IQueryable<TEntity> GetListQueryable(Expression<Func<TEntity, bool>> filter = null,
+            params Expression<Func<TEntity, object>>[] includeProperties);
+
         /// <summary>
         /// Gelen Id ye göre veriyi asenkron olarak getirir.
         /// </summary>
@@ -59,5 +61,9 @@ namespace Core.DataAccess
         /// </summary>
         /// <returns></returns>
         IQueryable<TEntity> GetQuery();
+
+
+        IQueryable<TEntity> GetQueryable(Expression<Func<TEntity, bool>> filter = null,
+            params Expression<Func<TEntity, object>>[] includeProperties);
     }
 }

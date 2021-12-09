@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.ResponseObjects;
+using eogrenci.BL.Abstract;
 using eogrenci.BL.Extensions;
 using eogrenci.Dal.UnitOfWork;
 using eogrenci.Dtos.LessonDtos;
@@ -11,16 +13,16 @@ using FluentValidation;
 
 namespace eogrenci.BL.Concrete
 {
-    public class LessonManager
+    public class LessonManager :  ILessonService 
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IValidator<LessonUpdateDto> _lessonAddDtoValidator;
+        private readonly IValidator<LessonAddDto> _lessonAddDtoValidator;
         private readonly IValidator<LessonUpdateDto> _lessonUpdateDtoValidator;
 
 
         public LessonManager(IUnitOfWork unitOfWork, IMapper mapper,
-            IValidator<LessonUpdateDto> lessonAddDtoValidator,
+            IValidator<LessonAddDto> lessonAddDtoValidator,
             IValidator<LessonUpdateDto> lessonUpdateDtoValidator)
         {
             _unitOfWork = unitOfWork;
@@ -29,7 +31,7 @@ namespace eogrenci.BL.Concrete
             _lessonUpdateDtoValidator = lessonUpdateDtoValidator;
         }
 
-        public async Task<IResponse<LessonUpdateDto>> Add(LessonUpdateDto lessonAddDto)
+        public async Task<IResponse<LessonAddDto>> Add(LessonAddDto lessonAddDto)
         {
             //Burada lessonAddDto yu Lesson a çevirmek için mapledik. Ekleme yapmak için Lesson tipinde göndermemiz gerekmektedir.
 
@@ -43,11 +45,11 @@ namespace eogrenci.BL.Concrete
                 await _unitOfWork.GetRepository<Lesson>().Add(_mapper.Map<Lesson>(lessonAddDto));
 
                 await _unitOfWork.SaveChanges();
-                return new Response<LessonUpdateDto>(ResponseType.Success, lessonAddDto);
+                return new Response<LessonAddDto>(ResponseType.Success, lessonAddDto);
             }
             else
             {
-                return new Response<LessonUpdateDto>(ResponseType.ValidationError, lessonAddDto, validationResult.ConvertToCustomValidationError());
+                return new Response<LessonAddDto>(ResponseType.ValidationError, lessonAddDto, validationResult.ConvertToCustomValidationError());
             }
 
         }
@@ -55,7 +57,7 @@ namespace eogrenci.BL.Concrete
         public async Task<IResponse<List<LessonListDto>>> GetAll()
         {
             //Burada ise Lesson olarak dönen değeri, LessonListDto ya dönüştürüyoruz. Çünkü api ye lessonListDto şeklinde sadece istediğimiz verileri döneriz.
-            var data = _mapper.Map<List<LessonListDto>>(await _unitOfWork.GetRepository<Lesson>().GetAll());
+            var data = _mapper.Map<List<LessonListDto>>(await _unitOfWork.GetRepository<Lesson>().GetAll(x => !x.IsDeleted));
 
             return new Response<List<LessonListDto>>(ResponseType.Success, data);
 

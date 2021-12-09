@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.ResponseObjects;
@@ -57,7 +58,7 @@ namespace eogrenci.BL.Concrete
         public async Task<IResponse<List<QuestionListDto>>> GetAll()
         {
             //Burada ise Question olarak dönen değeri, QuestionListDto ya dönüştürüyoruz. Çünkü api ye questionListDto şeklinde sadece istediğimiz verileri döneriz.
-            var data = _mapper.Map<List<QuestionListDto>>(await _unitOfWork.GetRepository<Question>().GetAll());
+            var data = _mapper.Map<List<QuestionListDto>>(await _unitOfWork.GetRepository<Question>().GetAll(x => !x.IsDeleted));
 
             return new Response<List<QuestionListDto>>(ResponseType.Success, data);
 
